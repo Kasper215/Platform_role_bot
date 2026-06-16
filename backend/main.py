@@ -5,7 +5,9 @@ from auth_router import router as auth_router
 from characters import router as characters_router
 from chats import router as chats_router
 
+# Создаём таблицы и безопасно дополняем существующие новыми колонками
 database.init_db()
+database.run_migrations()
 
 app = FastAPI(title="TriumphRoll API")
 
