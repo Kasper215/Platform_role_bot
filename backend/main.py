@@ -1,3 +1,4 @@
+from capture_middleware import CaptureMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import database
@@ -10,6 +11,7 @@ database.init_db()
 database.run_migrations()
 
 app = FastAPI(title="TriumphRoll API")
+app.add_middleware(CaptureMiddleware)
 
 # Разрешаем все нужные источники
 app.add_middleware(
