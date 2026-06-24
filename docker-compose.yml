@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build: ./backend
@@ -8,11 +6,12 @@ services:
       - "8001:8000"
     volumes:
       - ./backend:/app
-    # Добавляем чтение переменных окружения из файла .env в папке backend
+      - backend_data:/app/app/static/avatars
     env_file:
       - ./backend/.env
     environment:
       - PYTHONUNBUFFERED=1
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -24,3 +23,7 @@ services:
       - /app/node_modules
     depends_on:
       - backend
+    restart: unless-stopped
+
+volumes:
+  backend_data:
