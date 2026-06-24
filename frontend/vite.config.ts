@@ -15,11 +15,10 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        // КРИТИЧЕСКИ ВАЖНО:
-        // Внутри Docker-сети мы перенаправляем запросы на имя сервиса "backend" и его внутренний порт "8000"
+        // Внутри Docker-сети запросы на сервис "backend" порт 8000
+        // Бэкенд сам обрабатывает /api роуты
         target: 'http://backend:8000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

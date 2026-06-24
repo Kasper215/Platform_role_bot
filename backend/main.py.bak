@@ -1,4 +1,5 @@
 from system_middleware import SystemMonitorMiddleware
+from system_middleware import SystemMonitorMiddleware
 """
 Точка входа для совместимости (backend/main.py).
 Перенаправляет в новую структуру app/main.py
@@ -10,7 +11,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from app.main import app  # noqa
 
-app.add_middleware(SystemMonitorMiddleware)
+@app.get("/system/health")
+def system_health():
+    """Проверка состояния системы."""
+    from system_monitor import get_stats
+    return get_stats()
 
 @app.get("/system/health")
 def system_health():
