@@ -5,11 +5,7 @@ import * as chatApi from '@/api/chats';
 import type { ChatListItem } from '@/types';
 
 export default function Sidebar() {
-<<<<<<< HEAD
   const { token, user, activeScreen, activeCharacterId, navigate, toggleSidebar, sidebarOpen } = useStore();
-=======
-  const { token, user, activeScreen, activeCharacterId, navigate, toggleSidebar } = useStore();
->>>>>>> 1208215a57502a278b2abb9c62771db15700598b
   const [chats, setChats] = useState<ChatListItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +16,7 @@ export default function Sidebar() {
       const data = await chatApi.listChats();
       setChats(data);
     } catch {
-      /* игнор */
+      /* ignore */
     } finally {
       setLoading(false);
     }
@@ -30,7 +26,6 @@ export default function Sidebar() {
     loadChats();
   }, [loadChats]);
 
-  // Обновляем список чатов при переходе в галерею
   useEffect(() => {
     if (activeScreen === 'gallery') loadChats();
   }, [activeScreen, loadChats]);
@@ -48,61 +43,41 @@ export default function Sidebar() {
   const isActive = (charId: number) => activeScreen === 'chat' && activeCharacterId === charId;
 
   return (
-<<<<<<< HEAD
     <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-=======
-    <aside className="sidebar">
->>>>>>> 1208215a57502a278b2abb9c62771db15700598b
-      {/* Логотип */}
       <div className="sidebar-header">
         <div className="brand" onClick={() => navigate('gallery')} style={{ cursor: 'pointer' }}>
           <span className="brand-icon">✦</span> TRIUMPHROLL
         </div>
-<<<<<<< HEAD
-        <button 
-          className="icon-btn sidebar-close-btn" 
+        <button
+          className="icon-btn sidebar-close-btn"
           onClick={() => {
             if (activeScreen !== 'gallery') {
               navigate('gallery');
             } else {
               toggleSidebar();
             }
-          }} 
-          title={activeScreen !== 'gallery' ? "Назад" : "Свернуть"}
+          }}
+          title={activeScreen !== 'gallery' ? 'Назад' : 'Свернуть'}
         >
           ◀
         </button>
-=======
-        <button className="icon-btn sidebar-close-btn" onClick={toggleSidebar} title="Свернуть">◀</button>
->>>>>>> 1208215a57502a278b2abb9c62771db15700598b
       </div>
 
-      {/* Навигация */}
       <nav className="sidebar-nav">
-<<<<<<< HEAD
-        <button 
+        <button
           className={`sidebar-nav-btn ${activeScreen === 'gallery' ? 'active' : ''}`}
           onClick={() => navigate('gallery')}
         >
           🔍 Галерея
         </button>
-        <button 
+        <button
           className={`sidebar-nav-btn ${activeScreen === 'settings' ? 'active' : ''}`}
           onClick={() => navigate('settings')}
         >
-=======
-        <button className={`sidebar-nav-btn ${activeScreen === 'gallery' ? 'active' : ''}`}
-                onClick={() => navigate('gallery')}>
-          🔍 Галерея
-        </button>
-        <button className={`sidebar-nav-btn ${activeScreen === 'settings' ? 'active' : ''}`}
-                onClick={() => navigate('settings')}>
->>>>>>> 1208215a57502a278b2abb9c62771db15700598b
           ⚙️ Профиль
         </button>
       </nav>
 
-      {/* Список чатов */}
       <div className="sidebar-chats-header">
         <span>💬 Чаты</span>
       </div>
@@ -117,17 +92,12 @@ export default function Sidebar() {
           <button
             key={c.character_id}
             className={`sidebar-chat-item ${isActive(c.character_id) ? 'active' : ''}`}
-<<<<<<< HEAD
             onClick={() => {
               navigate('chat', c.character_id);
-              // Закрываем сайдбар на мобилках после выбора чата
               if (window.innerWidth <= 768) {
                 toggleSidebar();
               }
             }}
-=======
-            onClick={() => navigate('chat', c.character_id)}
->>>>>>> 1208215a57502a278b2abb9c62771db15700598b
           >
             <Avatar src={c.avatar_url} name={c.character_name} size={34} />
             <div className="sidebar-chat-info">
@@ -137,7 +107,7 @@ export default function Sidebar() {
               </div>
               <div className="sidebar-chat-last">
                 {c.last_content
-                  ? (c.last_content.length > 40 ? c.last_content.slice(0, 40) + '…' : c.last_content)
+                  ? (c.last_content.length > 40 ? c.last_content.slice(0, 40) + '...' : c.last_content)
                   : 'Начните разговор'}
               </div>
             </div>
@@ -146,7 +116,6 @@ export default function Sidebar() {
         ))}
       </div>
 
-      {/* Юзер */}
       {user && (
         <div className="sidebar-user">
           <Avatar src={user.avatar_url} name={user.display_name || user.email} size={28} />
@@ -155,8 +124,4 @@ export default function Sidebar() {
       )}
     </aside>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 1208215a57502a278b2abb9c62771db15700598b
