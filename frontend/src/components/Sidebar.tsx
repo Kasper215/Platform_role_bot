@@ -5,7 +5,7 @@ import * as chatApi from '@/api/chats';
 import type { ChatListItem } from '@/types';
 
 export default function Sidebar() {
-  const { token, user, activeScreen, activeCharacterId, navigate, toggleSidebar } = useStore();
+  const { token, user, activeScreen, activeCharacterId, navigate, toggleSidebar, sidebarOpen } = useStore();
   const [chats, setChats] = useState<ChatListItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -44,23 +44,39 @@ export default function Sidebar() {
   const isActive = (charId: number) => activeScreen === 'chat' && activeCharacterId === charId;
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
       {/* Логотип */}
       <div className="sidebar-header">
         <div className="brand" onClick={() => navigate('gallery')} style={{ cursor: 'pointer' }}>
           <span className="brand-icon">✦</span> TRIUMPHROLL
         </div>
-        <button className="icon-btn sidebar-close-btn" onClick={toggleSidebar} title="Свернуть">◀</button>
+        <button 
+          className="icon-btn sidebar-close-btn" 
+          onClick={() => {
+            if (activeScreen !== 'gallery') {
+              navigate('gallery');
+            } else {
+              toggleSidebar();
+            }
+          }} 
+          title={activeScreen !== 'gallery' ? "Назад" : "Свернуть"}
+        >
+          ◀
+        </button>
       </div>
 
       {/* Навигация */}
       <nav className="sidebar-nav">
-        <button className={`sidebar-nav-btn ${activeScreen === 'gallery' ? 'active' : ''}`}
-                onClick={() => navigate('gallery')}>
+        <button 
+          className={`sidebar-nav-btn ${activeScreen === 'gallery' ? 'active' : ''}`}
+          onClick={() => navigate('gallery')}
+        >
           🔍 Галерея
         </button>
-        <button className={`sidebar-nav-btn ${activeScreen === 'settings' ? 'active' : ''}`}
-                onClick={() => navigate('settings')}>
+        <button 
+          className={`sidebar-nav-btn ${activeScreen === 'settings' ? 'active' : ''}`}
+          onClick={() => navigate('settings')}
+        >
           ⚙️ Профиль
         </button>
       </nav>
@@ -80,7 +96,13 @@ export default function Sidebar() {
           <button
             key={c.character_id}
             className={`sidebar-chat-item ${isActive(c.character_id) ? 'active' : ''}`}
-            onClick={() => navigate('chat', c.character_id)}
+            onClick={() => {
+              navigate('chat', c.character_id);
+              // Закрываем сайдбар на мобилках после выбора чата
+              if (window.innerWidth <= 768) {
+                toggleSidebar();
+              }
+            }}
           >
             <Avatar src={c.avatar_url} name={c.character_name} size={34} />
             <div className="sidebar-chat-info">

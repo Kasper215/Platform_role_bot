@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build: ./backend
@@ -6,12 +8,14 @@ services:
       - "8001:8000"
     volumes:
       - ./backend:/app
-      - backend_data:/app/app/static/avatars
+      - ./backend/data:/app/data
     env_file:
       - ./backend/.env
     environment:
       - PYTHONUNBUFFERED=1
+      - SYS_DB_PATH=/app/data/system_health.db
     restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
 
   frontend:
     build: ./frontend
@@ -21,9 +25,9 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    restart: unless-stopped
+    command: npm run dev -- --host
     depends_on:
       - backend
-    restart: unless-stopped
-
-volumes:
-  backend_data:

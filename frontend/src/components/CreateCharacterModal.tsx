@@ -46,7 +46,7 @@ export default function CreateCharacterModal({ onClose, onCreated }: CreateChara
 
   return (
     <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="modal">
+      <div className="modal create-character-modal">
         <div className="modal-header">
           <h2>Создать персонажа</h2>
           <button className="icon-btn modal-close-btn" onClick={onClose}>✕</button>
@@ -57,45 +57,68 @@ export default function CreateCharacterModal({ onClose, onCreated }: CreateChara
             <input className="input-field" value={form.name} placeholder="Например: Александра..."
               onChange={(e) => set('name', e.target.value)} required />
           </div>
+
           <div className="input-group">
             <label className="input-label">URL аватара</label>
             <input className="input-field" value={form.avatar_url} placeholder="https://..."
               onChange={(e) => set('avatar_url', e.target.value)} />
           </div>
+
           <div className="input-group">
             <label className="input-label">Краткое описание</label>
             <input className="input-field" value={form.description} placeholder="Пару слов о персонаже для карточки..."
               onChange={(e) => set('description', e.target.value)} />
           </div>
-          <div className="input-group">
+
+          <div className="input-group prompt-scroll-group">
             <label className="input-label">Системный промпт (характер) *</label>
-            <textarea className="input-field" rows={4} value={form.persona}
-              placeholder="Характер, повадки, стиль общения..."
-              onChange={(e) => set('persona', e.target.value)} required />
+            <div className="prompt-scroll-container">
+              <textarea 
+                className="input-field prompt-textarea" 
+                rows={6} 
+                value={form.persona}
+                placeholder="Характер, повадки, стиль общения..."
+                onChange={(e) => set('persona', e.target.value)} 
+                required 
+              />
+            </div>
           </div>
-          <div className="input-group">
+
+          <div className="input-group prompt-scroll-group">
             <label className="input-label">Приветственное сообщение *</label>
-            <textarea className="input-field" rows={3} value={form.greeting}
-              placeholder="*Заходит в комнату, опираясь о стену...*"
-              onChange={(e) => set('greeting', e.target.value)} required />
+            <div className="prompt-scroll-container">
+              <textarea 
+                className="input-field prompt-textarea" 
+                rows={4} 
+                value={form.greeting}
+                placeholder="*Заходит в комнату, опираясь о стену...*"
+                onChange={(e) => set('greeting', e.target.value)} 
+                required 
+              />
+            </div>
           </div>
+
           <div className="input-group">
             <label className="input-label">Теги (через запятую)</label>
             <input className="input-field" value={form.tags}
               placeholder="романтика, аниме, фэнтези, фантастика..."
               onChange={(e) => set('tags', e.target.value)} />
           </div>
+
           <label className="checkbox-label">
             <input type="checkbox" checked={form.is_public}
               onChange={(e) => set('is_public', e.target.checked)} />
             <span>Сделать публичным</span>
           </label>
+
           <label className="checkbox-label">
             <input type="checkbox" checked={form.is_nsfw}
               onChange={(e) => set('is_nsfw', e.target.checked)} />
             <span>🔞 NSFW / 18+ контент</span>
           </label>
+
           {error && <p className="error-text">{error}</p>}
+
           <div className="modal-footer">
             <button type="button" className="btn-secondary" onClick={onClose}>Отмена</button>
             <button type="submit" className="btn-primary" disabled={loading}>
