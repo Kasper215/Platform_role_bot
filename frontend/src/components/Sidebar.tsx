@@ -5,7 +5,11 @@ import * as chatApi from '@/api/chats';
 import type { ChatListItem } from '@/types';
 
 export default function Sidebar() {
+<<<<<<< HEAD
   const { token, user, activeScreen, activeCharacterId, navigate, toggleSidebar, sidebarOpen } = useStore();
+=======
+  const { token, user, activeScreen, activeCharacterId, navigate, toggleSidebar } = useStore();
+>>>>>>> 1208215a57502a278b2abb9c62771db15700598b
   const [chats, setChats] = useState<ChatListItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -44,12 +48,17 @@ export default function Sidebar() {
   const isActive = (charId: number) => activeScreen === 'chat' && activeCharacterId === charId;
 
   return (
+<<<<<<< HEAD
     <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+=======
+    <aside className="sidebar">
+>>>>>>> 1208215a57502a278b2abb9c62771db15700598b
       {/* Логотип */}
       <div className="sidebar-header">
         <div className="brand" onClick={() => navigate('gallery')} style={{ cursor: 'pointer' }}>
           <span className="brand-icon">✦</span> TRIUMPHROLL
         </div>
+<<<<<<< HEAD
         <button 
           className="icon-btn sidebar-close-btn" 
           onClick={() => {
@@ -63,10 +72,14 @@ export default function Sidebar() {
         >
           ◀
         </button>
+=======
+        <button className="icon-btn sidebar-close-btn" onClick={toggleSidebar} title="Свернуть">◀</button>
+>>>>>>> 1208215a57502a278b2abb9c62771db15700598b
       </div>
 
       {/* Навигация */}
       <nav className="sidebar-nav">
+<<<<<<< HEAD
         <button 
           className={`sidebar-nav-btn ${activeScreen === 'gallery' ? 'active' : ''}`}
           onClick={() => navigate('gallery')}
@@ -77,6 +90,14 @@ export default function Sidebar() {
           className={`sidebar-nav-btn ${activeScreen === 'settings' ? 'active' : ''}`}
           onClick={() => navigate('settings')}
         >
+=======
+        <button className={`sidebar-nav-btn ${activeScreen === 'gallery' ? 'active' : ''}`}
+                onClick={() => navigate('gallery')}>
+          🔍 Галерея
+        </button>
+        <button className={`sidebar-nav-btn ${activeScreen === 'settings' ? 'active' : ''}`}
+                onClick={() => navigate('settings')}>
+>>>>>>> 1208215a57502a278b2abb9c62771db15700598b
           ⚙️ Профиль
         </button>
       </nav>
@@ -96,6 +117,7 @@ export default function Sidebar() {
           <button
             key={c.character_id}
             className={`sidebar-chat-item ${isActive(c.character_id) ? 'active' : ''}`}
+<<<<<<< HEAD
             onClick={() => {
               navigate('chat', c.character_id);
               // Закрываем сайдбар на мобилках после выбора чата
@@ -103,6 +125,9 @@ export default function Sidebar() {
                 toggleSidebar();
               }
             }}
+=======
+            onClick={() => navigate('chat', c.character_id)}
+>>>>>>> 1208215a57502a278b2abb9c62771db15700598b
           >
             <Avatar src={c.avatar_url} name={c.character_name} size={34} />
             <div className="sidebar-chat-info">
@@ -130,4 +155,8 @@ export default function Sidebar() {
       )}
     </aside>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1208215a57502a278b2abb9c62771db15700598b
