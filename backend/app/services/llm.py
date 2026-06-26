@@ -3,6 +3,7 @@ LLM-клиент для стриминга ответов от DeepSeek (и др
 Полный нарративный движок в стиле Character.ai / Chai с NSFW-режимом.
 """
 import json
+import traceback  # <-- ДОБАВИЛИ ИМПОРТ В НАЧАЛО ФАЙЛА
 from typing import AsyncGenerator
 import httpx
 from app.core.config import DEEPSEEK_API_KEY, DEEPSEEK_MODEL
@@ -121,4 +122,5 @@ async def get_bot_reply(
                 else:
                     yield f"⚠️ Ошибка API DeepSeek (код {response.status_code})"
         except Exception as e:
+            traceback.print_exc()  # <-- Теперь импортировано и отработает без ошибок
             yield f"⚠️ Ошибка соединения: {str(e)}"
