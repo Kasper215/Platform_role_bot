@@ -24,14 +24,10 @@ services:
     depends_on:
       - db
     environment:
-      # Переопределяем переменную окружения для базы данных
-      - DATABASE_URL=postgresql://role_user:role_secure_password_12345@db:5432/triumphroll_db
-      # Сюда же можно прописать ваши API ключи для удобства:
-      - DEEPSEEK_API_KEY=ваш_ключ
-      - OPENAI_API_KEY=ваш_ключ
+     - DATABASE_URL=postgresql://role_user:role_secure_password_12345@db:5432/triumphroll_db
       - PYTHONIOENCODING=utf-8
       - LANG=C.UTF-8
-      - LC_ALL=C.UTF-8
+      - LC_ALL=C.UTF-8      
     ports:
       - "8001:8000"
 
