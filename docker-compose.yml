@@ -29,6 +29,9 @@ services:
       # Сюда же можно прописать ваши API ключи для удобства:
       - DEEPSEEK_API_KEY=ваш_ключ
       - OPENAI_API_KEY=ваш_ключ
+      - PYTHONIOENCODING=utf-8
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
     ports:
       - "8001:8000"
 
