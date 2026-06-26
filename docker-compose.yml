@@ -1,29 +1,45 @@
+version: '3.8'
+
 services:
+  # 1. Добавляем сервис базы данных PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: role_bot_db
+    restart: always
+    environment:
+      POSTGRES_USER: role_user
+      POSTGRES_PASSWORD: role_secure_password_12345
+      POSTGRES_DB: triumphroll_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # 2. Обновляем сервис бэкенда
   backend:
     build: ./backend
     container_name: role_bot_backend
+    restart: always
+    # Указываем, что бэкенд запускается только после старта базы данных
+    depends_on:
+      - db
+    environment:
+      # Переопределяем переменную окружения для базы данных
+      - DATABASE_URL=postgresql://role_user:role_secure_password_12345@db:5432/triumphroll_db
+      # Сюда же можно прописать ваши API ключи для удобства:
+      - DEEPSEEK_API_KEY=ваш_ключ
+      - OPENAI_API_KEY=ваш_ключ
     ports:
       - "8001:8000"
-    volumes:
-      - ./backend:/app
-      - ./backend/data:/app/data
-    env_file:
-      - ./backend/.env
-    environment:
-      - PYTHONUNBUFFERED=1
-      - SYS_DB_PATH=/app/data/system_health.db
-    restart: unless-stopped
 
+  # 3. Сервис фронтенда (оставьте его настройки без изменений)
   frontend:
     build: ./frontend
     container_name: role_bot_frontend
+    restart: always
     ports:
       - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    depends_on:
-      - backend
-    restart: unless-stopped
+
+# Объявляем именованный том для сохранения данных БД на диске
+volumes:
+  pgdata:

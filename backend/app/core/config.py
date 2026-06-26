@@ -1,41 +1,54 @@
 """
 Глобальная конфигурация приложения.
-Все секреты читаются из переменных окружения (файл .env).
+Все секреты читаются из переменных окружения (файл .env) с помощью Pydantic Settings.
 """
-import os
-from dotenv import load_dotenv
 from pathlib import Path
-
-load_dotenv()
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Базовая директория проекта
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# --- База данных ---
-DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR}/triumphroll.db")
 
-# --- JWT / Auth ---
-SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-in-production-!!!")
-ALGORITHM: str = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "10080"))  # 7 дней
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "Roleplay Bot API"
 
-# --- LLM API Keys ---
-DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
-OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
-VENICE_API_KEY: str = os.getenv("VENICE_API_KEY", "")
-GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    # --- База данных ---
+    DATABASE_URL: str = f"sqlite:///{BASE_DIR}/triumphroll.db"
 
-# --- Модели по умолчанию ---
-DEEPSEEK_MODEL: str = "deepseek-chat"
-OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "google/gemini-2.0-flash-exp:free")
+    # --- JWT / Auth ---
+    SECRET_KEY: str = "change-me-in-production-!!!"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 дней
 
-# --- CORS ---
-CORS_ORIGINS: list[str] = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+    # --- LLM API Keys ---
+    DEEPSEEK_API_KEY: str = ""
+    OPENROUTER_API_KEY: str = ""
+    VENICE_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
+
+    # --- Модели по умолчанию ---
+    DEEPSEEK_MODEL: str = "deepseek-chat"
+    OPENROUTER_MODEL: str = "google/gemini-2.0-flash-exp:free"
+
+    # --- CORS ---
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
+
+    # Конфигурация чтения из .env файла
+    model_config = SettingsConfigDict(
+        # Указываем абсолютный путь к .env файлу на основе базовой директории
+        env_file=str(BASE_DIR / ".env"),
+        env_file_encoding="utf-8-sig",
+        extra="ignore"
+    )
+
+
+# Инициализируем настройки
+settings = Settings()
 
 # --- Пути ---
 AVATARS_DIR: Path = BASE_DIR / "app" / "static" / "avatars"
