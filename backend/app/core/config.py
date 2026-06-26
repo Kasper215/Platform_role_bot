@@ -42,13 +42,27 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         # Указываем абсолютный путь к .env файлу на основе базовой директории
         env_file=str(BASE_DIR / ".env"),
-        env_file_encoding="utf-8-sig",
+        env_file_encoding="utf-8-sig",  # Избавились от Windows BOM
         extra="ignore"
     )
 
 
 # Инициализируем настройки
 settings = Settings()
+
+# ─── Экспорт переменных для обратной совместимости со старыми файлами (main.py, security.py) ───
+CORS_ORIGINS = settings.CORS_ORIGINS
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+
+DEEPSEEK_API_KEY = settings.DEEPSEEK_API_KEY
+OPENROUTER_API_KEY = settings.OPENROUTER_API_KEY
+VENICE_API_KEY = settings.VENICE_API_KEY
+GEMINI_API_KEY = settings.GEMINI_API_KEY
+
+DEEPSEEK_MODEL = settings.DEEPSEEK_MODEL
+OPENROUTER_MODEL = settings.OPENROUTER_MODEL
 
 # --- Пути ---
 AVATARS_DIR: Path = BASE_DIR / "app" / "static" / "avatars"
