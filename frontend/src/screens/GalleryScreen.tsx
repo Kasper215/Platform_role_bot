@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react'; // Убрали импорт React
 import { useStore } from '@/store';
 import CharacterCard from '@/components/CharacterCard';
 import CreateCharacterModal from '@/components/CreateCharacterModal';
-import Badge from '@/components/Badge';
+// Убрали неиспользуемый импорт Badge для фикса TS6133
 import { CenteredSpinner } from '@/components/Spinner';
 import * as charApi from '@/api/characters';
 import type { CharacterListItem, TagInfo, SortOption } from '@/types';

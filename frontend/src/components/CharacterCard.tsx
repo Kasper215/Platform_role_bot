@@ -1,5 +1,4 @@
-import React from 'react';
-import Avatar from './Avatar';
+import Avatar from './Avatar'; // Убрали неиспользуемый импорт React для фикса TS6133
 import Badge from './Badge';
 import type { CharacterListItem } from '@/types';
 
@@ -19,16 +18,16 @@ export default function CharacterCard({ character, userId, onClick, onDelete, on
   return (
     <div className="char-card" onClick={onClick} role="button" tabIndex={0}
          onKeyDown={(e) => e.key === 'Enter' && onClick()}>
-      {/* Обложка */}
+      {/* Обложка-контейнер для круглого неонового аватара */}
       <div className="char-card-cover">
-        <Avatar src={character.avatar_url} name={character.name} size={999} radius="0" />
+        <Avatar src={character.avatar_url} name={character.name} size={86} />
         {character.is_nsfw && <Badge variant="nsfw" className="char-card-badge">18+</Badge>}
         {isOwner && onDelete && (
           <button className="char-card-delete" onClick={(e) => { e.stopPropagation(); onDelete(character.id); }}
                   title="Удалить" aria-label="Удалить">✕</button>
         )}
       </div>
-      {/* Инфо */}
+      {/* Информация о персонаже */}
       <div className="char-card-body">
         <h3 className="char-card-name">{character.name}</h3>
         <p className="char-card-desc">{shortDesc}</p>

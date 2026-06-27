@@ -1,39 +1,39 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   COSMIC DARK & GLASSMORPHISM — ULTRA PREMIUM DESIGN SYSTEM
+   AETHERIUM VOID — COMSIC NEON TEAL & AMETHYST DESIGN SYSTEM
    ════════════════════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* ─── Root Variables (Cosmic Space, Amethyst & Neon Violet) ───────────────── */
+/* ─── Root Variables (Obsidian Void, Amethyst & Electric Teal) ────────────── */
 :root {
-  --bg: #05020d;               /* Ультра-темный космический */
-  --bg-soft: #0a0618;          /* Глубокий аметистовый */
-  --surface: rgba(16, 12, 31, 0.65); /* Стекло (Glassmorphism) */
-  --surface-solid: #120d24;    /* Плотная подложка */
-  --surface-2: #1c1537;        /* Активные панели и ховеры */
-  --surface-3: #271f4c;        /* Выделение */
-  --text: #f3f0fa;             /* Контрастный белый (холодный) */
-  --text-sec: #b1a9cc;         /* Мягкий лавандовый */
-  --text-muted: #5e5680;       /* Затененный фиолетовый */
-  --border: rgba(139, 92, 246, 0.15); /* Тончайшие неоновые границы */
-  --accent-1: #8b5cf6;         /* Яркий пурпурный */
-  --accent-2: #a78bfa;         /* Светлый фиолетовый */
-  --accent-soft: rgba(139, 92, 246, 0.06);
-  --accent-glow: rgba(139, 92, 246, 0.2);
-  --gradient-accent: linear-gradient(135deg, #8b5cf6, #6366f1);
+  --bg: #030209;                 /* Обсидиановая космическая бездна */
+  --bg-soft: #070514;            /* Глубокий аметистовый космос */
+  --surface: rgba(13, 9, 28, 0.7); /* Эфирное матовое стекло */
+  --surface-solid: #0e0921;      /* Плотная подложка */
+  --surface-2: #1b1338;          /* Панели при наведении / активные блоки */
+  --surface-3: #271a4f;          /* Выделение */
+  --text: #f1ecfa;               /* Контрастный лавандово-белый */
+  --text-sec: #9e95c4;           /* Приглушенный лавандовый */
+  --text-muted: #524a73;         /* Затененный фиолетовый */
+  --border: rgba(45, 212, 191, 0.16); /* Тончайшие бирюзовые неоновые границы */
+  --accent-1: #2dd4bf;           /* Электрический неоновый бирюзовый (Teal) */
+  --accent-2: #8b5cf6;           /* Яркий фиолетовый */
+  --accent-soft: rgba(45, 212, 191, 0.08); /* Мягкое бирюзовое свечение */
+  --accent-glow: rgba(45, 212, 191, 0.22);  /* Насыщенный бирюзовый Glow */
+  --gradient-accent: linear-gradient(135deg, #8b5cf6, #2dd4bf); /* Градиент Фиолетовый -> Бирюзовый */
   --danger: #ff4a6b;
-  --success: #10b981;
+  --success: #2dd4bf;
   --nsfw: #ff4a6b;
-  --bot-bubble: rgba(18, 13, 36, 0.55);
-  --bot-bubble-border: rgba(139, 92, 246, 0.12);
-  --radius: 18px;              /* Скругления c.ai */
-  --radius-sm: 12px;
-  --radius-xs: 8px;
+  --bot-bubble: rgba(13, 9, 28, 0.65);
+  --bot-bubble-border: rgba(45, 212, 191, 0.12);
+  --radius: 20px;                /* Плавное скругление капсул */
+  --radius-sm: 14px;
+  --radius-xs: 10px;
   --radius-pill: 9999px;
-  --radius-lg: 24px;
-  --shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
-  --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.4);
-  --overlay: rgba(3, 1, 10, 0.9);
+  --radius-lg: 28px;
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+  --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.5);
+  --overlay: rgba(3, 1, 8, 0.95);
 }
 
 /* ─── Global Reset ─────────────────────────────────────────────────────────── */
@@ -45,8 +45,8 @@
 
 body {
   background: var(--bg);
-  background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.06) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.04) 0px, transparent 50%);
   color: var(--text);
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -74,7 +74,7 @@ body {
   border-radius: var(--radius-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-1);
+  background: var(--accent-1); /* Бирюзовый скроллбар при наведении */
 }
 
 /* ─── App Layout ──────────────────────────────────────────────────────────── */
@@ -113,7 +113,7 @@ body {
 }
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 25px rgba(45, 212, 191, 0.35); /* Бирюзовое свечение кнопки */
 }
 .btn-primary:disabled {
   opacity: 0.35;
@@ -137,8 +137,8 @@ body {
 .btn-secondary:hover {
   background: var(--surface-2);
   color: var(--text);
-  border-color: var(--accent-1);
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
+  border-color: var(--accent-1); /* Бирюзовая граница при ховере */
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.1);
 }
 
 .icon-btn {
@@ -182,7 +182,7 @@ body {
   transition: all 0.2s;
 }
 .input-field:focus {
-  border-color: var(--accent-1);
+  border-color: var(--accent-1); /* Бирюзовая подсветка ввода */
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 .input-field::placeholder {
@@ -231,9 +231,9 @@ body {
   border: 1px solid rgba(255, 74, 107, 0.15);
 }
 .badge-safe {
-  background: rgba(16, 185, 129, 0.06);
+  background: rgba(45, 212, 191, 0.06);
   color: var(--success);
-  border: 1px solid rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(45, 212, 191, 0.15); /* Бирюзовый кант */
 }
 .badge-public {
   background: rgba(139, 92, 246, 0.06);
@@ -338,7 +338,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: rgba(10, 6, 24, 0.7); /* Матовое полупрозрачное стекло */
+  background: rgba(5, 2, 18, 0.75); /* Матовое полупрозрачное стекло */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid var(--border);
@@ -386,13 +386,13 @@ body {
   cursor: pointer;
 }
 .sidebar-nav-btn:hover {
-  background: rgba(139, 92, 246, 0.05);
+  background: rgba(45, 212, 191, 0.03); /* Мягкий бирюзовый ховер */
   color: var(--text);
 }
 .sidebar-nav-btn.active {
   background: var(--accent-soft);
-  color: var(--accent-2);
-  box-shadow: inset 2px 0 0 var(--accent-1);
+  color: var(--accent-1);
+  box-shadow: inset 2px 0 0 var(--accent-1); /* Бирюзовый штрих слева */
 }
 .sidebar-chats-header {
   padding: 1rem 1.5rem 0.5rem;
@@ -424,10 +424,10 @@ body {
   cursor: pointer;
 }
 .sidebar-chat-item:hover {
-  background: rgba(139, 92, 246, 0.03);
+  background: rgba(45, 212, 191, 0.03);
 }
 .sidebar-chat-item.active {
-  background: rgba(139, 92, 246, 0.06);
+  background: rgba(45, 212, 191, 0.05);
   border-left: 3px solid var(--accent-1);
   padding-left: calc(1.5rem - 3px);
 }
@@ -486,7 +486,7 @@ body {
   font-size: 2rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--text), var(--accent-2));
+  background: linear-gradient(135deg, var(--text), var(--accent-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -546,8 +546,8 @@ body {
 }
 .sort-btn.active {
   background: var(--accent-soft);
-  color: var(--accent-2);
-  border-color: rgba(139, 92, 246, 0.3);
+  color: var(--accent-1);
+  border-color: rgba(45, 212, 191, 0.3);
   box-shadow: 0 0 10px var(--accent-glow);
 }
 
@@ -577,8 +577,8 @@ body {
 }
 .tag-btn.active {
   background: var(--accent-soft);
-  color: var(--accent-2);
-  border-color: rgba(139, 92, 246, 0.3);
+  color: var(--accent-1);
+  border-color: rgba(45, 212, 191, 0.3);
 }
 
 .category-tabs {
@@ -627,11 +627,11 @@ body {
   gap: 1.75rem;
 }
 
-/* ─── Character Card (Elegant Premium Grid Cards) ─────────────────────────── */
+/* ─── Character Card (Aetherium Capsule Custom Style) ────────────────────── */
 .char-card {
   background: var(--surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
@@ -640,34 +640,43 @@ body {
               border-color 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  height: 360px;
+  height: 330px; /* Компактная форма */
   position: relative;
   animation: floatUp 0.35s ease-out;
 }
 .char-card:hover {
   transform: translateY(-6px);
   border-color: var(--accent-1);
-  box-shadow: 0 16px 35px rgba(139, 92, 246, 0.18), 
-              0 0 20px rgba(139, 92, 246, 0.12);
+  box-shadow: 0 16px 35px rgba(45, 212, 191, 0.16), 
+              0 0 20px rgba(45, 212, 191, 0.1);
 }
 .char-card:active {
   transform: translateY(-1px);
 }
 .char-card-cover {
-  height: 185px;
+  height: 125px; 
   width: 100%;
   position: relative;
-  background: var(--bg-soft);
-  overflow: hidden;
+  overflow: visible; /* Чтобы аватар плавал */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.1) 0%, transparent 70%);
 }
+/* Старое прямоугольное превью пересобрано в неоновый круг */
 .char-card-cover img {
-  width: 100%;
-  height: 100%;
+  width: 86px !important;
+  height: 86px !important;
+  border-radius: 50% !important;
+  border: 2.5px solid var(--accent-1) !important; /* Бирюзовое кольцо */
+  box-shadow: 0 0 15px var(--accent-glow) !important;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s;
 }
 .char-card:hover .char-card-cover img {
-  transform: scale(1.05); /* Зум обложки при наведении */
+  transform: scale(1.08);
+  border-color: var(--accent-2); /* Фиолетовое свечение при наведении */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.35) !important;
 }
 .char-card-badge {
   position: absolute;
@@ -702,18 +711,24 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 1.15rem;
-  gap: 0.5rem;
+  padding: 0.5rem 1.25rem 1.15rem; 
+  gap: 0.4rem;
+  text-align: center; /* Центрирование */
 }
 .char-card-name {
   font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: -0.01em;
+  color: var(--text);
+  transition: color 0.2s;
+}
+.char-card:hover .char-card-name {
+  color: var(--accent-1);
 }
 .char-card-desc {
   font-size: 0.82rem;
   color: var(--text-sec);
-  line-height: 1.45;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -723,19 +738,17 @@ body {
 .char-card-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  justify-content: center; 
+  gap: 0.75rem;
   margin-top: auto;
 }
 .char-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
+  display: none; /* Скрываем мелкие теги для чистоты */
 }
 .char-card-stats {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   flex-shrink: 0;
 }
 .char-card-like {
@@ -760,9 +773,9 @@ body {
   padding: 8px 0;
   background: var(--gradient-accent);
   border: none;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-sm);
   color: #fff;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.82rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -960,7 +973,7 @@ body {
   background: rgba(16, 12, 31, 0.75); /* Полупрозрачность */
   backdrop-filter: blur(20px);         /* Эффект матового стекла */
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+  border-bottom: 1px solid rgba(45, 212, 191, 0.15); /* Бирюзовая полоса */
   flex-shrink: 0;
   gap: 0.5rem;
 }
@@ -1033,14 +1046,14 @@ body {
   background: var(--gradient-accent);
   color: #fff;
   border-bottom-right-radius: 4px;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.12);
+  box-shadow: 0 4px 15px rgba(45, 212, 191, 0.15); /* Свечение бирюзовым */
 }
 .bubble-bot {
   background: var(--bot-bubble);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--bot-bubble-border);
-  border-left: 3px solid var(--accent-1); /* Неоновый акцент сбоку */
+  border-left: 3px solid var(--accent-1); /* Бирюзовый акцент сбоку */
   color: var(--text);
   border-bottom-left-radius: 4px;
 }
@@ -1062,6 +1075,7 @@ body {
 .msg-content {
   white-space: pre-wrap !important; 
   word-break: break-word !important;
+  line-height: 1.6 !important;
 }
 
 .msg-time {
@@ -1121,7 +1135,7 @@ body {
   display: block;
   width: 7px;
   height: 7px;
-  background: var(--text-muted);
+  background: var(--accent-1); /* Бирюзовые точки */
   border-radius: 50%;
   animation: bounce 1.2s ease-in-out infinite;
 }
@@ -1156,14 +1170,15 @@ body {
 }
 .chat-action:hover {
   background: var(--surface-2);
-  color: var(--text);
+  color: var(--accent-1);
+  border-color: var(--accent-1);
 }
 
 /* Chat Input Bar (Floating Modern Composer Style) */
 .chat-input-bar {
   display: flex;
   gap: 0.65rem;
-  padding: 1rem 2.5rem 2rem; /* Парящий контейнер */
+  padding: 1rem 2.5rem 2rem; 
   background: transparent;
   border-top: none;
   flex-shrink: 0;
@@ -1176,7 +1191,7 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border);
-  border-radius: 24px; /* Округлая пилюля */
+  border-radius: 24px; 
   color: var(--text);
   font-size: 0.92rem;
   outline: none;
@@ -1191,13 +1206,13 @@ body {
 }
 .chat-textarea:focus {
   border-color: var(--accent-1);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 12px var(--accent-glow), 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 .send-btn {
   width: 44px;
   height: 44px;
   flex-shrink: 0;
-  border-radius: 50%; /* Круглая кнопка */
+  border-radius: 50%; 
   background: var(--gradient-accent);
   border: none;
   color: #fff;
@@ -1286,8 +1301,8 @@ body {
 }
 .theme-choice-btn.active {
   background: var(--accent-soft);
-  border-color: rgba(99, 102, 241, 0.25);
-  color: var(--accent-2);
+  border-color: rgba(45, 212, 191, 0.25);
+  color: var(--accent-1);
 }
 
 /* ─── Modal ────────────────────────────────────────────────────────────────── */
@@ -1772,6 +1787,91 @@ body {
 .mobile-only {
   display: none;
 }
+@media (max-width: 768px) {
+  .mobile-only {
+    display: flex !important;
+  }
+}
+
+/* ─── Адаптация модалки создания персонажа ──────────────────────────────── */
+@media (max-width: 768px) {
+  .create-character-modal {
+    max-width: 98% !important;
+    border-radius: 12px !important;
+  }
+  .create-character-modal .modal-body {
+    padding: 0.75rem 1rem 1rem !important;
+    gap: 0.75rem;
+  }
+  .create-character-modal .modal-header {
+    padding: 0.75rem 1rem 0 !important;
+  }
+  .create-character-modal .modal-header h2 {
+    font-size: 1rem !important;
+  }
+  .create-character-modal .input-field {
+    font-size: 0.85rem !important;
+    padding: 0.5rem 0.7rem !important;
+  }
+  .create-character-modal .input-label {
+    font-size: 0.75rem !important;
+  }
+  .create-character-modal .prompt-scroll-container {
+    max-height: 120px !important;
+  }
+  .create-character-modal .prompt-textarea {
+    font-size: 0.85rem !important;
+    padding: 0.5rem 0.7rem !important;
+    min-height: 70px !important;
+  }
+  .create-character-modal .modal-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .create-character-modal .modal-footer button {
+    width: 100%;
+    justify-content: center;
+  }
+  .create-character-modal .checkbox-label {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ─── Адаптация кнопок в галерее ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .btn-primary, .btn-secondary {
+    font-size: 0.8rem !important;
+    padding: 0.5rem 0.8rem !important;
+    border-radius: 8px !important;
+  }
+  .gallery-actions .btn-primary {
+    font-size: 0.85rem !important;
+    padding: 0.6rem 1rem !important;
+  }
+}
+
+/* ─── Фикс скролла на мобилках ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .gallery-screen, .chat-messages, .modal-body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ─── Скрытие десктопных элементов ────────────────────────────────────────── */
+.desktop-only {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .mobile-only {
     display: flex !important;
