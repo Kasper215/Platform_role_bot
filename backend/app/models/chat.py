@@ -36,3 +36,6 @@ class ChatMeta(Base):
     chat_id = Column(String(100), nullable=False)
     last_message_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     pinned = Column(Boolean, default=False)
+    
+    # ─── Добавляем колонку для долговременной памяти ИИ ───
+    context_summary = Column(Text, nullable=True) # <-- ДОБАВИЛИ ТУТ
