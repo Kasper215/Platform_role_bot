@@ -146,7 +146,7 @@ export default function GalleryScreen() {
           ['SAFE', '🛡️ Safe', 'Безопасный контент'],
           ['NSFW', '🔞 18+', 'Только для взрослых'],
           ['MY', '👤 Мои', 'Созданные вами']
-        ] as const).map(([val, label, desc]) => (
+        ] as const).map(([val, label]) => (
           <button
             key={val}
             className={`category-tab ${category === val ? 'active' : ''}`}

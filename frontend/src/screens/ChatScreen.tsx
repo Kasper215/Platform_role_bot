@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useStore } from '@/store';
 import Avatar from '@/components/Avatar';
 import Badge from '@/components/Badge';
@@ -10,7 +10,7 @@ import * as charApi from '@/api/characters';
 import type { Message, Character } from '@/types';
 
 export default function ChatScreen({ characterId }: { characterId: number }) {
-  const { navigate, token, toggleSidebar } = useStore();
+  const { navigate, toggleSidebar } = useStore();
   const [character, setCharacter] = useState<Character | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
