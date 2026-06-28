@@ -58,9 +58,11 @@ export default function ProfileScreen({ characterId }: { characterId: number }) 
     <div className="profile-screen">
       <div className="profile-card">
         {/* Кнопка назад */}
-        <button className="profile-back" onClick={() => navigate('gallery')}>← Назад</button>
+        <button className="profile-back" onClick={() => navigate('gallery')}>
+          <span>←</span> Назад
+        </button>
 
-        {/* Обложка */}
+        {/* Обложка с градиентом */}
         <div className="profile-cover">
           {character.avatar_url ? (
             <img src={character.avatar_url} alt="" className="profile-cover-img" />
@@ -72,64 +74,104 @@ export default function ProfileScreen({ characterId }: { characterId: number }) 
 
         {/* Тело */}
         <div className="profile-body">
+          {/* Шапка с аватаром */}
           <div className="profile-head">
-            <Avatar src={character.avatar_url} name={character.name} size={80} radius="20px" />
-            <div>
+            <div className="profile-avatar-wrapper">
+              <Avatar src={character.avatar_url} name={character.name} size={120} radius="50%" />
+              {character.is_featured && (
+                <div className="profile-featured-badge">⭐</div>
+              )}
+            </div>
+            <div className="profile-info">
               <h1 className="profile-name">{character.name}</h1>
               <div className="profile-badges">
                 <Badge variant={character.is_nsfw ? 'nsfw' : 'safe'}>
-                  {character.is_nsfw ? 'NSFW 18+' : 'Safe'}
+                  {character.is_nsfw ? '🔞 NSFW 18+' : '✓ Safe'}
                 </Badge>
-                {character.is_public && <Badge variant="public">Публичный</Badge>}
-                {character.is_featured && <Badge variant="featured">⭐ Featured</Badge>}
+                {character.is_public && <Badge variant="public">🌐 Публичный</Badge>}
               </div>
             </div>
           </div>
 
-          {/* Статистика */}
-          <div className="profile-stats">
-            <div className="profile-stat"><span className="profile-stat-val">{character.views}</span> просмотров</div>
-            <div className="profile-stat"><span className="profile-stat-val">{character.chat_count}</span> чатов</div>
-            <div className="profile-stat"><span className="profile-stat-val">{likeCount}</span> лайков</div>
+          {/* Статистика в карточках */}
+          <div className="profile-stats-grid">
+            <div className="profile-stat-card">
+              <div className="profile-stat-icon">👁️</div>
+              <div className="profile-stat-content">
+                <div className="profile-stat-val">{character.views}</div>
+                <div className="profile-stat-label">просмотров</div>
+              </div>
+            </div>
+            <div className="profile-stat-card">
+              <div className="profile-stat-icon">💬</div>
+              <div className="profile-stat-content">
+                <div className="profile-stat-val">{character.chat_count}</div>
+                <div className="profile-stat-label">чатов</div>
+              </div>
+            </div>
+            <div className="profile-stat-card">
+              <div className="profile-stat-icon">❤️</div>
+              <div className="profile-stat-content">
+                <div className="profile-stat-val">{likeCount}</div>
+                <div className="profile-stat-label">лайков</div>
+              </div>
+            </div>
           </div>
 
           {/* Теги */}
           {character.tags.length > 0 && (
-            <div className="profile-tags">
-              {character.tags.map((t) => <Badge key={t} variant="tag">{t}</Badge>)}
+            <div className="profile-section">
+              <h3 className="profile-section-title">
+                <span className="section-icon">🏷️</span>
+                Теги
+              </h3>
+              <div className="profile-tags">
+                {character.tags.map((t) => <Badge key={t} variant="tag">{t}</Badge>)}
+              </div>
             </div>
           )}
 
           {/* Описание */}
           {character.description && (
             <div className="profile-section">
-              <h3 className="profile-section-title">Описание</h3>
+              <h3 className="profile-section-title">
+                <span className="section-icon">📝</span>
+                Описание
+              </h3>
               <p className="profile-section-text">{character.description}</p>
             </div>
           )}
 
           {/* Характер */}
           <div className="profile-section">
-            <h3 className="profile-section-title">Характер и Биография</h3>
+            <h3 className="profile-section-title">
+              <span className="section-icon">🎭</span>
+              Характер и Биография
+            </h3>
             <div className="profile-section-text profile-persona">{renderContent(character.persona)}</div>
           </div>
 
           {/* Приветствие */}
           {character.greeting && (
             <div className="profile-section">
-              <h3 className="profile-section-title">Как начинается диалог</h3>
+              <h3 className="profile-section-title">
+                <span className="section-icon">👋</span>
+                Как начинается диалог
+              </h3>
               <div className="profile-greeting-box">{renderContent(character.greeting)}</div>
             </div>
           )}
 
           {/* Действия */}
           <div className="profile-actions">
-            <button className="btn-primary" onClick={() => navigate('chat', character.id)}>
-              Начать чат с {character.name} →
+            <button className="btn-primary profile-chat-btn" onClick={() => navigate('chat', character.id)}>
+              <span>💬</span>
+              Начать чат с {character.name}
             </button>
             {user && user.id !== character.owner_id && (
-              <button className={`btn-secondary ${liked ? 'liked' : ''}`} onClick={handleLike}>
-                {liked ? '♥ Убрать лайк' : '♡ Лайк'} ({likeCount})
+              <button className={`btn-secondary profile-like-btn ${liked ? 'liked' : ''}`} onClick={handleLike}>
+                <span>{liked ? '♥' : '♡'}</span>
+                {liked ? 'Убрать лайк' : 'Лайк'} ({likeCount})
               </button>
             )}
           </div>

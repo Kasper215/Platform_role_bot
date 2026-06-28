@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'; // Убрали импорт React
+import { useState, useEffect, useCallback } from 'react';
 import { useStore } from '@/store';
 import CharacterCard from '@/components/CharacterCard';
 import CreateCharacterModal from '@/components/CreateCharacterModal';
-// Убрали неиспользуемый импорт Badge для фикса TS6133
 import { CenteredSpinner } from '@/components/Spinner';
 import * as charApi from '@/api/characters';
 import type { CharacterListItem, TagInfo, SortOption } from '@/types';
@@ -73,71 +72,135 @@ export default function GalleryScreen() {
 
   return (
     <div className="gallery-screen">
-      {/* Хедер */}
-      <div className="gallery-header">
-        <h1 className="gallery-title">Галерея персонажей</h1>
-        <p className="gallery-subtitle">Выберите персонажа для ролевого общения</p>
-        <div className="gallery-actions">
-          <button className="btn-primary" onClick={() => setShowCreate(true)}>+ Создать</button>
+      {/* Hero Header */}
+      <div className="gallery-hero">
+        <div className="gallery-hero-content">
+          <h1 className="gallery-hero-title">
+            Откройте мир <span className="gradient-text">ИИ-персонажей</span>
+          </h1>
+          <p className="gallery-hero-subtitle">
+            Создавайте уникальных персонажей и общайтесь с ними в захватывающих ролевых историях
+          </p>
+          <div className="gallery-hero-stats">
+            <div className="hero-stat">
+              <span className="hero-stat-icon">🤖</span>
+              <span className="hero-stat-value">{characters.length}</span>
+              <span className="hero-stat-label">персонажей</span>
+            </div>
+            <div className="hero-stat">
+              <span className="hero-stat-icon">💬</span>
+              <span className="hero-stat-value">{characters.reduce((sum, c) => sum + c.chat_count, 0)}</span>
+              <span className="hero-stat-label">чатов</span>
+            </div>
+            <div className="hero-stat">
+              <span className="hero-stat-icon">❤️</span>
+              <span className="hero-stat-value">{characters.reduce((sum, c) => sum + c.like_count, 0)}</span>
+              <span className="hero-stat-label">лайков</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Поиск */}
-      <div className="gallery-search-bar">
-        <input
-          className="gallery-search-input"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Поиск по имени, описанию или тегам..."
-        />
-        <div className="gallery-sort-btns">
-          {(['new', 'popular', 'trending'] as SortOption[]).map((s) => (
-            <button
-              key={s}
-              className={`sort-btn ${sort === s ? 'active' : ''}`}
-              onClick={() => setSort(s)}
-            >
-              {s === 'new' ? '🕐 Новые' : s === 'popular' ? '❤️ Популярные' : '🔥 Тренды'}
-            </button>
-          ))}
+      {/* Search & Filters */}
+      <div className="gallery-controls">
+        <div className="search-wrapper">
+          <span className="search-icon">🔍</span>
+          <input
+            className="gallery-search-input"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Поиск по имени, описанию или тегам..."
+          />
+          {search && (
+            <button className="search-clear" onClick={() => setSearch('')}>✕</button>
+          )}
         </div>
-      </div>
 
-      {/* Теги */}
-      <div className="gallery-tags">
-        <button
-          className={`tag-btn ${!activeTag ? 'active' : ''}`}
-          onClick={() => setActiveTag(null)}
-        >Все</button>
-        {tags.slice(0, 15).map((t) => (
+        {/* Sort Buttons */}
+        <div className="sort-buttons">
           <button
-            key={t.name}
-            className={`tag-btn ${activeTag === t.name ? 'active' : ''}`}
-            onClick={() => setActiveTag(activeTag === t.name ? null : t.name)}
+            className={`sort-btn ${sort === 'new' ? 'active' : ''}`}
+            onClick={() => setSort('new')}
           >
-            {t.name} <span className="tag-count">{t.count}</span>
+            <span>🕐</span> Новые
+          </button>
+          <button
+            className={`sort-btn ${sort === 'popular' ? 'active' : ''}`}
+            onClick={() => setSort('popular')}
+          >
+            <span>❤️</span> Популярные
+          </button>
+          <button
+            className={`sort-btn ${sort === 'trending' ? 'active' : ''}`}
+            onClick={() => setSort('trending')}
+          >
+            <span>🔥</span> Тренды
+          </button>
+        </div>
+      </div>
+
+      {/* Category Tabs */}
+      <div className="gallery-categories">
+        {([
+          ['ALL', '🌟 Все', 'Все персонажи'],
+          ['SAFE', '🛡️ Safe', 'Безопасный контент'],
+          ['NSFW', '🔞 18+', 'Только для взрослых'],
+          ['MY', '👤 Мои', 'Созданные вами']
+        ] as const).map(([val, label, desc]) => (
+          <button
+            key={val}
+            className={`category-tab ${category === val ? 'active' : ''}`}
+            onClick={() => setCategory(val)}
+          >
+            <span className="category-icon">{label.split(' ')[0]}</span>
+            <span className="category-label">{label.split(' ').slice(1).join(' ')}</span>
           </button>
         ))}
       </div>
 
-      {/* Фильтр категорий */}
-      <div className="category-tabs">
-        {([['ALL', 'Все'], ['SAFE', '🛡️ Safe'], ['NSFW', '🔞 18+'], ['MY', '👤 Мои']] as const).map(
-          ([val, label]) => (
+      {/* Tags */}
+      {tags.length > 0 && (
+        <div className="gallery-tags-section">
+          <h3 className="tags-title">Популярные теги</h3>
+          <div className="gallery-tags">
             <button
-              key={val}
-              className={`category-tab ${category === val ? 'active' : ''}`}
-              onClick={() => setCategory(val)}
-            >{label}</button>
-          ),
-        )}
+              className={`tag-btn ${!activeTag ? 'active' : ''}`}
+              onClick={() => setActiveTag(null)}
+            >
+              Все теги
+            </button>
+            {tags.slice(0, 20).map((t) => (
+              <button
+                key={t.name}
+                className={`tag-btn ${activeTag === t.name ? 'active' : ''}`}
+                onClick={() => setActiveTag(activeTag === t.name ? null : t.name)}
+              >
+                {t.name}
+                <span className="tag-count">{t.count}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Create Button */}
+      <div className="gallery-create-section">
+        <button className="btn-primary create-btn" onClick={() => setShowCreate(true)}>
+          <span>✨</span> Создать персонажа
+        </button>
       </div>
 
-      {/* Рекомендованные */}
+      {/* Featured Section */}
       {featured.length > 0 && !search && !activeTag && category === 'ALL' && (
-        <div className="gallery-section">
-          <h2 className="gallery-section-title">🔥 Рекомендуемые</h2>
-          <div className="gallery-grid">
+        <div className="gallery-section featured-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="section-icon">⭐</span>
+              Рекомендуемые
+            </h2>
+            <p className="section-subtitle">Лучшие персонажи по мнению сообщества</p>
+          </div>
+          <div className="gallery-grid featured-grid">
             {featured.map((c) => (
               <CharacterCard
                 key={c.id}
@@ -152,19 +215,38 @@ export default function GalleryScreen() {
         </div>
       )}
 
-      {/* Основная сетка */}
+      {/* Main Grid */}
       <div className="gallery-section">
-        {featured.length > 0 && !search && !activeTag && category === 'ALL' && (
-          <h2 className="gallery-section-title">Все персонажи</h2>
-        )}
+        <div className="section-header">
+          <h2 className="section-title">
+            {search ? `🔍 Результаты поиска: "${search}"` :
+             activeTag ? `🏷️ Тег: ${activeTag}` :
+             category === 'MY' ? '👤 Мои персонажи' :
+             category === 'NSFW' ? '🔞 NSFW контент' :
+             category === 'SAFE' ? '🛡️ Safe контент' :
+             '🌟 Все персонажи'}
+          </h2>
+          <p className="section-subtitle">
+            {filtered.length} {filtered.length === 1 ? 'персонаж' : 
+             filtered.length < 5 ? 'персонажа' : 'персонажей'}
+          </p>
+        </div>
+
         {loading ? (
           <CenteredSpinner text="Загрузка персонажей..." />
         ) : filtered.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">🤖</div>
-            <h3>Персонажей пока нет</h3>
-            <p>Создайте первого ИИ-персонажа</p>
-            <button className="btn-primary" onClick={() => setShowCreate(true)}>+ Создать</button>
+            <h3>Персонажей не найдено</h3>
+            <p>
+              {search ? 'Попробуйте изменить поисковый запрос' :
+               activeTag ? 'Попробуйте выбрать другой тег' :
+               category === 'MY' ? 'Создайте своего первого персонажа' :
+               'Станьте первым, кто создаст персонажа!'}
+            </p>
+            <button className="btn-primary" onClick={() => setShowCreate(true)}>
+              <span>✨</span> Создать персонажа
+            </button>
           </div>
         ) : (
           <div className="gallery-grid">
@@ -180,8 +262,9 @@ export default function GalleryScreen() {
             ))}
             <div className="char-card add-card" onClick={() => setShowCreate(true)} role="button" tabIndex={0}>
               <div className="add-card-content">
-                <span className="add-card-icon">+</span>
-                <p>Создать персонажа</p>
+                <span className="add-card-icon">✨</span>
+                <p className="add-card-text">Создать нового персонажа</p>
+                <p className="add-card-hint">Расскажите свою историю</p>
               </div>
             </div>
           </div>
